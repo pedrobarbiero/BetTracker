@@ -7,8 +7,10 @@ public class Bet : BaseEntity
 {
     public required Guid BrankroolId { get; set; }
     public virtual required Bankroll Bankroll { get; set; }
-    public required Guid TipsterId { get; set; }
-    public virtual required Tipster Tipster { get; set; }
+    public Guid? TipsterId { get; set; }
+    public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
+    public required Guid BettingMarketId { get; set; }
+    public virtual required BettingMarket BettingMarket { get; set; }
     public bool PreMatch { get; set; }
     public bool Settled { get; set; }
     public string? Description { get; set; }
