@@ -6,7 +6,7 @@ namespace Domain;
 public class Bet : BaseEntity<BetId>
 {
     public required BankrollId BrankroolId { get; set; }
-    public virtual required Bankroll Bankroll { get; set; }
+    //public virtual required BankrollDto Bankroll { get; set; }
     public TipsterId? TipsterId { get; set; }
     public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
     public required BettingMarketId BettingMarketId { get; set; }
