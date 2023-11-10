@@ -2,10 +2,10 @@
 
 namespace Application.Persistence.Contracts;
 
-public interface IGenericRepository<T> where T : BaseEntity
+public interface IGenericRepository<T, Id> where T : BaseEntity<Id>
 {
-    Task<T?> GetByIdAsync(Guid id);
+    Task<T?> GetByIdAsync(Id id);
     Task<T> AddAsync(T entity);
     void Update(T entity);
-    Task<bool> DeleteAsync(Guid id);
+    Task<bool> DeleteAsync(Id id);
 }
