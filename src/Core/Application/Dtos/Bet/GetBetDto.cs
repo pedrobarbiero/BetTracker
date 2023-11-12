@@ -1,9 +1,10 @@
-﻿using Domain;
+﻿using Application.Common;
+using Domain;
 using Domain.Enums;
 
 namespace Application.Dtos;
 
-public class BetDto : BaseDto<BetId>
+public record GetBetDto : BaseDto<BetId>
 {
     //Todo: finish DTOs
     public required BankrollId BrankroolId { get; set; }

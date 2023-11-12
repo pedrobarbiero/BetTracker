@@ -10,6 +10,7 @@ public static class ApplicationServicesRegistration
     {
         services.AddScoped<IBetMapper, BetMapper>();
 
+        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining(typeof(ApplicationServicesRegistration)));
         return services;
     }
 }

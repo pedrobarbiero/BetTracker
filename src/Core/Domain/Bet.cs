@@ -10,7 +10,7 @@ public class Bet : BaseEntity<BetId>
     public TipsterId? TipsterId { get; set; }
     public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
     public required BettingMarketId BettingMarketId { get; set; }
-    public virtual required BettingMarket BettingMarket { get; set; }
+    public virtual BettingMarket? BettingMarket { get; set; }
     public bool PreMatch { get; set; }
     public bool Settled { get; set; }
     public string? Description { get; set; }

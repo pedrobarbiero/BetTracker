@@ -2,10 +2,11 @@
 
 namespace Application.Persistence.Contracts;
 
-public interface IGenericRepository<T, Id> where T : BaseEntity<Id>
+public interface IGenericRepository<T, IdType> where T : BaseEntity<IdType> where IdType : class
 {
-    Task<T?> GetByIdAsync(Id id);
+    Task<T?> GetByIdAsync(IdType id);
     Task<T> AddAsync(T entity);
     void Update(T entity);
-    Task<bool> DeleteAsync(Id id);
+    Task<bool> DeleteAsync(IdType id);
+    Task<IEnumerable<T>> GetPagedAsync(uint page, uint pageSize);
 }
