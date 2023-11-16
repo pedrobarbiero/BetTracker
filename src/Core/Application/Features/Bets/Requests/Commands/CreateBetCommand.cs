@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Bet;
+using Domain;
 using MediatR;
 
 namespace Application.Features.Bets.Requests.Commands;
