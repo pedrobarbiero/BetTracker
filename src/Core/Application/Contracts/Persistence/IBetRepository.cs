@@ -1,6 +1,6 @@
 ﻿using Domain;
 
-namespace Application.Persistence.Contracts;
+namespace Application.Contracts.Persistence;
 
 public interface IBetRepository : IGenericRepository<Bet, BetId>
 {

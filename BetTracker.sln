@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Core\Domain\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Core\Application\Application.csproj", "{EEB2B099-60FA-4378-A9F0-7A84A4DCEB8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Infrastructure\Persistence\Persistence.csproj", "{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Infrastructure\Persistence\Persistence.csproj", "{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure\Infrastructure.csproj", "{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{D0C478AA-C0AC-4E22-8F7F-39387B130FF6} = {A84D4DDB-3785-4C5D-8787-5F63528EDAC0}
 		{EEB2B099-60FA-4378-A9F0-7A84A4DCEB8B} = {A84D4DDB-3785-4C5D-8787-5F63528EDAC0}
 		{7C1E4AF6-C822-4433-BE45-AD8894B00B7E} = {2D296AE3-23FD-4B89-B061-961ACF1513B4}
+		{CB7BB898-63F7-426A-9FAF-5BD3219B5B81} = {2D296AE3-23FD-4B89-B061-961ACF1513B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF80BD9D-84F9-451C-B22F-56C7F0C09A0D}

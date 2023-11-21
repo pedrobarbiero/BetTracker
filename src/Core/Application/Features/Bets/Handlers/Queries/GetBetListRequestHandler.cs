@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
+﻿using Application.Contracts.Persistence;
+using Application.Dtos;
 using Application.Features.Bets.Requests.Queries;
 using Application.Mappers.Contracts;
-using Application.Persistence.Contracts;
 using MediatR;
 
 namespace Application.Features.Bets.Handlers.Queries;

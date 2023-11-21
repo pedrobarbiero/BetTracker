@@ -1,4 +1,4 @@
-﻿using Application.Persistence.Contracts;
+﻿using Application.Contracts.Persistence;
 using Domain;
 
 namespace Persistence.Repositories;

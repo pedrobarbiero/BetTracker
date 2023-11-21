@@ -1,6 +1,6 @@
 ﻿using Domain.Common;
 
-namespace Application.Persistence.Contracts;
+namespace Application.Contracts.Persistence;
 
 public interface IGenericRepository<T, IdType> where T : BaseEntity<IdType> where IdType : class
 {

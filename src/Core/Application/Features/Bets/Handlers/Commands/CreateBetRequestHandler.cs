@@ -1,7 +1,7 @@
 ﻿using Application.Features.Bets.Requests.Commands;
 using Application.Features.Bets.Validators;
 using Application.Mappers.Contracts;
-using Application.Persistence.Contracts;
+using Application.Contracts.Persistence;
 using Application.Responses;
 using Domain;
 using MediatR;

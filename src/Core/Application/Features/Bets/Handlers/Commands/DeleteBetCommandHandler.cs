@@ -1,6 +1,6 @@
 ﻿using Application.Features.Bets.Requests.Commands;
 using Application.Mappers.Contracts;
-using Application.Persistence.Contracts;
+using Application.Contracts.Persistence;
 using MediatR;
 using System;
 using System.Collections.Generic;
