@@ -1,0 +1,27 @@
+﻿# Use the official image as a parent image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+# Set the working directory
+WORKDIR /app
+
+# Expose port 8080 and 8081
+EXPOSE 8080
+EXPOSE 8081
+
+# Use SDK image to build the project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Copy the project file and restore the dependencies
+COPY ["src/Api/BetTracker.Api/BetTracker.Api.csproj", "src/Api/BetTracker.Api/"]
+RUN dotnet restore "src/Api/BetTracker.Api/BetTracker.Api.csproj"
+
+# Copy the rest of the code and build the project
+COPY . .
+WORKDIR "/src/Api/BetTracker.Api"
+RUN dotnet publish "BetTracker.Api.csproj" -c Release -o /app/publish
+
+# Build runtime image
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "BetTracker.Api.dll"]

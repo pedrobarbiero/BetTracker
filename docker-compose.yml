@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  web:
+    image: pedrobarbiero/bettracker
+    build:
+      context: .
+      dockerfile: ./src/Api/BetTracker.Api/Dockerfile.prod.yml
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "_Password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
