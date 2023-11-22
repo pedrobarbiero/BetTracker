@@ -3,13 +3,13 @@ using Domain.Enums;
 
 namespace Domain;
 
-public class Bet : BaseEntity<BetId>
+public class Bet : BaseEntity
 {
-    public required BankrollId BrankroolId { get; set; }
+    public required Guid BrankroolId { get; set; }
     //public virtual required BankrollDto Bankroll { get; set; }
-    public TipsterId? TipsterId { get; set; }
+    public Guid? TipsterId { get; set; }
     public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
-    public required BettingMarketId BettingMarketId { get; set; }
+    public required Guid BettingMarketId { get; set; }
     public virtual BettingMarket? BettingMarket { get; set; }
     public bool PreMatch { get; set; }
     public bool Settled { get; set; }
@@ -42,6 +42,3 @@ public class Bet : BaseEntity<BetId>
     }
 
 }
-
-public record BetId(Guid Value);
-//Todo: configure HasConversion in entityframework

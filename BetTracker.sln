@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C67DDB47-3AC3-4BCF-A758-BAB6B17CBE78}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -27,9 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Core\App
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Infrastructure\Persistence\Persistence.csproj", "{7C1E4AF6-C822-4433-BE45-AD8894B00B7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure\Infrastructure.csproj", "{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure\Infrastructure.csproj", "{CB7BB898-63F7-426A-9FAF-5BD3219B5B81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetTracker.Api", "src\Api\BetTracker.Api\BetTracker.Api.csproj", "{E6C27946-30B9-44BD-B5DC-30CE2E415F96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetTracker.Api", "src\Api\BetTracker.Api\BetTracker.Api.csproj", "{E6C27946-30B9-44BD-B5DC-30CE2E415F96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

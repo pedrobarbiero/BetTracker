@@ -3,12 +3,10 @@ using Domain.Enums;
 
 namespace Domain;
 
-public class Pick : BaseEntity<PickId>
+public class Pick : BaseEntity
 {
-    public required BetId BetId { get; set; }
+    public required Guid BetId { get; set; }
     public virtual required Bet Bet { get; set; }
     public required Sport Sport { get; set; }
     public decimal Odd { get; set; }
 }
-
-public record PickId(Guid Value);

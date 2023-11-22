@@ -4,12 +4,12 @@ using Domain.Enums;
 
 namespace Application.Dtos;
 
-public record GetBetDto : BaseDto<BetId>
+public record GetBetDto : BaseDto
 {
     //Todo: finish DTOs
-    public required BankrollId BrankroolId { get; set; }
-    public TipsterId? TipsterId { get; set; }
-    public required BettingMarketId BettingMarketId { get; set; }
+    public required Guid BrankroolId { get; set; }
+    public Guid? TipsterId { get; set; }
+    public required Guid BettingMarketId { get; set; }
     public required BettingMarket BettingMarket { get; set; }
     public bool PreMatch { get; set; }
     public bool Settled { get; set; }

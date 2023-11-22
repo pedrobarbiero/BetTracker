@@ -2,7 +2,7 @@
 
 namespace Application.Contracts.Persistence;
 
-public interface IBetRepository : IGenericRepository<Bet, BetId>
+public interface IBetRepository : IGenericRepository<Bet>
 {
 
 }

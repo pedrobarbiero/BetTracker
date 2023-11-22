@@ -1,6 +1,6 @@
 ﻿namespace Application.Common;
 
-public record BaseDto<IdType> where IdType : class
+public record BaseDto
 {
-    public required IdType Id { get; set; }
+    public required Guid Id { get; set; }
 }

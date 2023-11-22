@@ -18,7 +18,7 @@ public class BetTrackerDbContext : DbContext
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var utcNow = DateTime.UtcNow; // Todo: use time provider
-        foreach (var entry in ChangeTracker.Entries<IBaseEntity>())
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
             entry.Entity.UpdatedDate = utcNow;
             if (entry.State == EntityState.Added)

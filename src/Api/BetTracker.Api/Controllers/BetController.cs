@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Features.Bets.Requests.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BetTracker.Api.Controllers;

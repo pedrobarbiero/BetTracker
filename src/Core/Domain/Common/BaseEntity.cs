@@ -1,14 +1,8 @@
 ﻿namespace Domain.Common;
 
-public interface IBaseEntity
+public abstract class BaseEntity
 {
-    DateTimeOffset CreatedDate { get; set; }
-    DateTimeOffset? UpdatedDate { get; set; }
-}
-
-public abstract class BaseEntity<T> : IBaseEntity where T : class
-{
-    public T Id { get; set; }
+    public required Guid Id { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? UpdatedDate { get; set; }
 }

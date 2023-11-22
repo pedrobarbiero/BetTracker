@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Domain;
 
-public class Bankroll : BaseEntity<BankrollId>
+public class Bankroll : BaseEntity
 {
     public required string Name { get; set; }
     public decimal InitialBalance { get; set; }
@@ -12,5 +12,3 @@ public class Bankroll : BaseEntity<BankrollId>
     public decimal StandardUnit { get; set; }
     public virtual ICollection<Bet> Bets { get; }
 }
-
-public record BankrollId(Guid Value);

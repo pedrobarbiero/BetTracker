@@ -5,5 +5,5 @@ namespace Application.Features.Bets.Requests.Commands;
 
 public record DeleteBetCommand : IRequest<bool>
 {
-    public required BetId Id { get; set; }
+    public required Guid Id { get; set; }
 }

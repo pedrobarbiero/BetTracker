@@ -5,10 +5,10 @@ namespace Application.Dtos.Bet;
 
 public record CreateBetDto
 {
-    public required BetId Id { get; set; } // Todo: create an Id generator
-    public required BankrollId BrankroolId { get; set; }
-    public TipsterId? TipsterId { get; set; }
-    public required BettingMarketId BettingMarketId { get; set; }
+    public required Guid Id { get; set; } // Todo: create an Id generator
+    public required Guid BrankroolId { get; set; }
+    public Guid? TipsterId { get; set; }
+    public required Guid BettingMarketId { get; set; }
     public bool PreMatch { get; set; }
     public bool Settled { get; set; }
     public string? Description { get; set; }

@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories;
 
-public class GenericRepository<T, IdType> : IGenericRepository<T, IdType>
-    where T : BaseEntity<IdType>
-    where IdType : class
+public class GenericRepository<T> : IGenericRepository<T>
+    where T : BaseEntity
 {
     private readonly BetTrackerDbContext _dbContext;
     public GenericRepository(BetTrackerDbContext dbContext)
@@ -20,13 +19,13 @@ public class GenericRepository<T, IdType> : IGenericRepository<T, IdType>
         return entity;
     }
 
-    public async Task<bool> DeleteAsync(IdType id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         var count = await _dbContext.Set<T>().Where(t => t.Id == id).ExecuteDeleteAsync();
         return count > 0;
     }
 
-    public Task<T?> GetByIdAsync(IdType id)
+    public Task<T?> GetByIdAsync(Guid id)
     {
         return _dbContext.Set<T>().AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
     }
