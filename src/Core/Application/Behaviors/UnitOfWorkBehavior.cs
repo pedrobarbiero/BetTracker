@@ -1,7 +1,7 @@
 ﻿using Application.Contracts.Persistence;
 using MediatR;
 
-namespace Application.Features;
+namespace Application.Behaviors;
 
 public sealed class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull, new()
@@ -23,5 +23,4 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<
     }
 
     private static bool IsCommand() => typeof(TRequest).Name.EndsWith("Command");
-
 }

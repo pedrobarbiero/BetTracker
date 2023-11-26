@@ -1,5 +1,8 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Bet;
+using Application.Features.Bets.Requests.Commands;
 using Application.Features.Bets.Requests.Queries;
+using Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +25,13 @@ public class BetController : ControllerBase
     {
         var budgets = await _mediator.Send(new GetBetListRequest());
         return Ok(budgets);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BaseCommandResponse<Guid>>> CreateBet(CreateBetDto betDto)
+    {
+        var response = await _mediator.Send(new CreateBetCommand { BetDto = betDto });
+        return Ok(response);
     }
 
 }

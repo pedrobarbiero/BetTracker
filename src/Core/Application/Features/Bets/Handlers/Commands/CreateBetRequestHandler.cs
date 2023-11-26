@@ -1,7 +1,6 @@
-﻿using Application.Features.Bets.Requests.Commands;
-using Application.Features.Bets.Validators;
+﻿using Application.Contracts.Persistence;
+using Application.Features.Bets.Requests.Commands;
 using Application.Mappers.Contracts;
-using Application.Contracts.Persistence;
 using Application.Responses;
 using MediatR;
 
@@ -20,18 +19,6 @@ public class CreateBetRequestHandler : IRequestHandler<CreateBetCommand, BaseCom
 
     public async Task<BaseCommandResponse<Guid>> Handle(CreateBetCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateBetValidator();
-        var validationResult = await validator.ValidateAsync(request.BetDto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BaseCommandResponse<Guid>
-            {
-                Errors = validationResult.Errors.Select(error => new KeyValuePair<string, string>(error.PropertyName, error.ErrorMessage)).ToDictionary(x => x.Key, x => x.Value),
-                Success = false,
-                Message = "Bet creation failed",
-                Data = Guid.Empty
-            };
-        }
         var bet = _betMapper.DtoToBet(request.BetDto);
         var created = await _betRepository.AddAsync(bet);
         return new BaseCommandResponse<Guid>()
