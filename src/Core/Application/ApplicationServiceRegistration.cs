@@ -1,4 +1,5 @@
-﻿using Application.Mappers.Contracts;
+﻿using Application.Features;
+using Application.Mappers.Contracts;
 using Application.Mappers.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +11,11 @@ public static class ApplicationServicesRegistration
     {
         services.AddScoped<IBetMapper, BetMapper>();
 
-        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining(typeof(ApplicationServicesRegistration)));
+        services.AddMediatR(c =>
+        {
+            c.RegisterServicesFromAssemblyContaining(typeof(ApplicationServicesRegistration));
+            c.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
+        });
         return services;
     }
 }

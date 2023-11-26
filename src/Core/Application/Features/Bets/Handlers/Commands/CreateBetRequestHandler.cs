@@ -3,7 +3,6 @@ using Application.Features.Bets.Validators;
 using Application.Mappers.Contracts;
 using Application.Contracts.Persistence;
 using Application.Responses;
-using Domain;
 using MediatR;
 
 namespace Application.Features.Bets.Handlers.Commands;
