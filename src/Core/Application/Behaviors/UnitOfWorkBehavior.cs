@@ -13,11 +13,11 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<
         _unitOfWork = unitOfWork;
     }
 
-    public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var response = next();
+        var response = await next();
         if (IsCommand())
-            _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return response;
     }
