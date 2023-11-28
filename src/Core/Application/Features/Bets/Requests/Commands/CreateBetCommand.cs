@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Bets.Requests.Commands;
 
-public record CreateBetCommand : IRequest<BaseCommandResponse<Guid>>
+public record CreateBetCommand : IRequest<BaseCommandResponse>
 {
     public required CreateBetDto BetDto { get; set; }
 }

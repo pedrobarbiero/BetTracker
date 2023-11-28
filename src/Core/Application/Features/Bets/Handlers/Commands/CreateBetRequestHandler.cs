@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Bets.Handlers.Commands;
 
-public class CreateBetRequestHandler : IRequestHandler<CreateBetCommand, BaseCommandResponse<Guid>>
+public class CreateBetRequestHandler : IRequestHandler<CreateBetCommand, BaseCommandResponse>
 {
     private readonly IBetRepository _betRepository;
     private readonly IBetMapper _betMapper;
@@ -17,13 +17,13 @@ public class CreateBetRequestHandler : IRequestHandler<CreateBetCommand, BaseCom
         _betRepository = betRepository;
     }
 
-    public async Task<BaseCommandResponse<Guid>> Handle(CreateBetCommand request, CancellationToken cancellationToken)
+    public async Task<BaseCommandResponse> Handle(CreateBetCommand request, CancellationToken cancellationToken)
     {
         var bet = _betMapper.DtoToBet(request.BetDto);
         var created = await _betRepository.AddAsync(bet);
-        return new BaseCommandResponse<Guid>()
+        return new BaseCommandResponse()
         {
-            Data = created.Id,
+            Id = created.Id,
             Success = true,
             Message = "Bet created successfully"
         };

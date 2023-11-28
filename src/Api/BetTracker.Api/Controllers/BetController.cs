@@ -28,7 +28,7 @@ public class BetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseCommandResponse<Guid>>> CreateBet(CreateBetDto betDto)
+    public async Task<ActionResult<BaseCommandResponse>> CreateBet(CreateBetDto betDto)
     {
         var response = await _mediator.Send(new CreateBetCommand { BetDto = betDto });
         return Ok(response);
