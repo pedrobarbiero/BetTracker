@@ -1,5 +1,4 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Bet;
 using Application.Features.Bets.Requests.Commands;
 using Application.Features.Bets.Requests.Queries;
 using Application.Responses;
@@ -28,9 +27,9 @@ public class BetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseCommandResponse>> CreateBet(CreateBetDto betDto)
+    public async Task<ActionResult<BaseCommandResponse>> CreateBet(CreateBetCommand createBetCommand)
     {
-        var response = await _mediator.Send(new CreateBetCommand { BetDto = betDto });
+        var response = await _mediator.Send(createBetCommand);
         return Ok(response);
     }
 

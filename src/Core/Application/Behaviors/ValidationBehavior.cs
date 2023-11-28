@@ -6,7 +6,7 @@ namespace Application.Behaviors;
 
 public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull, new()
-    where TResponse : BaseCommandResponse
+    where TResponse : BaseCommandResponse, new()
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -24,12 +24,12 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
 
         if (failures.Any())
         {
-            return new BaseCommandResponse()
+            return new TResponse()
             {
                 Success = false,
                 Message = "Validation errors",
                 Errors = failures.Select(f => new KeyValuePair<string, string>(f.PropertyName, f.ErrorMessage)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
-            } as TResponse;
+            };
         }
 
         return await next();

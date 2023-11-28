@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Bet;
+using Application.Features.Bets.Requests.Commands;
 using Application.Mappers.Contracts;
 using Domain;
 using Riok.Mapperly.Abstractions;
@@ -13,5 +13,5 @@ public partial class BetMapper : IBetMapper
 
     public partial Bet DtoToBet(GetBetDto betDto);
 
-    public partial Bet DtoToBet(CreateBetDto betDto);
+    public partial Bet DtoToBet(CreateBetCommand createBetCommand);
 }
