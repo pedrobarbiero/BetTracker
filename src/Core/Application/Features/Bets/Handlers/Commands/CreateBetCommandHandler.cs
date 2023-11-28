@@ -6,12 +6,12 @@ using MediatR;
 
 namespace Application.Features.Bets.Handlers.Commands;
 
-public class CreateBetRequestHandler : IRequestHandler<CreateBetCommand, BaseCommandResponse>
+public class CreateBetCommandHandler : IRequestHandler<CreateBetCommand, BaseCommandResponse>
 {
     private readonly IBetRepository _betRepository;
     private readonly IBetMapper _betMapper;
 
-    public CreateBetRequestHandler(IBetMapper betMapper, IBetRepository betRepository)
+    public CreateBetCommandHandler(IBetMapper betMapper, IBetRepository betRepository)
     {
         _betMapper = betMapper;
         _betRepository = betRepository;

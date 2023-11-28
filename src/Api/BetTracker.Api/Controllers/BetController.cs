@@ -22,7 +22,7 @@ public class BetController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetBetDto>>> GetBets()
     {
-        var budgets = await _mediator.Send(new GetBetListRequest());
+        var budgets = await _mediator.Send(new GetBetListQuery());
         return Ok(budgets);
     }
 

@@ -1,12 +1,7 @@
-﻿using Application.Features.Bets.Requests.Commands;
+﻿using Application.Contracts.Persistence;
+using Application.Features.Bets.Requests.Commands;
 using Application.Mappers.Contracts;
-using Application.Contracts.Persistence;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.Bets.Handlers.Commands;
 

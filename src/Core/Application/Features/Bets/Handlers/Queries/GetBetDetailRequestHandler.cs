@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Bets.Handlers.Queries;
 
-public class GetBetDetailRequestHandler : IRequestHandler<GetBetDetailRequest, GetBetDto>
+public class GetBetDetailRequestHandler : IRequestHandler<GetBetDetailQuery, GetBetDto>
 {
     private readonly IBetRepository _betRepository;
     private readonly IBetMapper _betMapper;
@@ -15,7 +15,7 @@ public class GetBetDetailRequestHandler : IRequestHandler<GetBetDetailRequest, G
         _betRepository = betRepository;
         _betMapper = betMapper;
     }
-    public async Task<GetBetDto?> Handle(GetBetDetailRequest request, CancellationToken cancellationToken)
+    public async Task<GetBetDto?> Handle(GetBetDetailQuery request, CancellationToken cancellationToken)
     {
         var bet = await _betRepository.GetByIdAsync(request.BetId);
         if (bet == null)
