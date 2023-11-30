@@ -4,7 +4,7 @@ using Domain.Enums;
 
 namespace Application.Dtos;
 
-public record GetBetDto : BaseDto
+public record GetBetDetailDto : BaseDto
 {
     //Todo: finish DTOs
     public required Guid BrankroolId { get; set; }

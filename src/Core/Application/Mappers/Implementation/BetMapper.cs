@@ -9,9 +9,9 @@ namespace Application.Mappers.Implementation;
 [Mapper]
 public partial class BetMapper : IBetMapper
 {
-    public partial GetBetDto BetToDto(Bet bet);
+    public partial GetBetDetailDto BetToDto(Bet bet);
 
-    public partial Bet DtoToBet(GetBetDto betDto);
+    public partial Bet DtoToBet(GetBetDetailDto betDto);
 
     public partial Bet DtoToBet(CreateBetCommand createBetCommand);
 }

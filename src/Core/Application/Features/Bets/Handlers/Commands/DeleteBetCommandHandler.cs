@@ -8,12 +8,10 @@ namespace Application.Features.Bets.Handlers.Commands;
 public record DeleteBetCommandHandler : IRequestHandler<DeleteBetCommand, bool>
 {
     private readonly IBetRepository _betRepository;
-    private readonly IBetMapper _betMapper;
 
     public DeleteBetCommandHandler(IBetRepository betRepository, IBetMapper betMapper)
     {
         _betRepository = betRepository;
-        _betMapper = betMapper;
     }
 
     public Task<bool> Handle(DeleteBetCommand request, CancellationToken cancellationToken)

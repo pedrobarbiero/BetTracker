@@ -20,7 +20,7 @@ public class BetController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetBetDto>>> GetBets()
+    public async Task<ActionResult<IEnumerable<GetBetDetailDto>>> GetBets()
     {
         var budgets = await _mediator.Send(new GetBetListQuery());
         return Ok(budgets);

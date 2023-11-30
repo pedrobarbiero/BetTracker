@@ -6,7 +6,7 @@ namespace Application.Mappers.Contracts;
 
 public interface IBetMapper
 {
-    public GetBetDto BetToDto(Bet bet);
-    public Bet DtoToBet(GetBetDto betDto);
+    public GetBetDetailDto BetToDto(Bet bet);
+    public Bet DtoToBet(GetBetDetailDto betDto);
     public Bet DtoToBet(CreateBetCommand createBetCommand);
 }
