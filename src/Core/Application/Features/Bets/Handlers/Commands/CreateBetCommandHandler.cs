@@ -19,7 +19,7 @@ public class CreateBetCommandHandler : IRequestHandler<CreateBetCommand, BaseCom
 
     public async Task<BaseCommandResponse> Handle(CreateBetCommand request, CancellationToken cancellationToken)
     {
-        var bet = _betMapper.DtoToBet(request);
+        var bet = _betMapper.ToBet(request);
         var created = await _betRepository.AddAsync(bet);
         return new BaseCommandResponse()
         {

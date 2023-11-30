@@ -7,7 +7,7 @@ namespace Application.Features.Bets.Requests.Commands;
 public record CreateBetCommand : IRequest<BaseCommandResponse>
 {
     public required Guid Id { get; set; } // Todo: create an Id generator
-    public required Guid BrankroolId { get; set; }
+    public required Guid BankrollId { get; set; }
     public Guid? TipsterId { get; set; }
     public required Guid BettingMarketId { get; set; }
     public bool PreMatch { get; set; }

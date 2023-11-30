@@ -1,13 +1,12 @@
 ﻿using Domain.Common;
 using Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Domain;
 
 public class Bet : BaseEntity
 {
-    public required Guid BrankroolId { get; set; }
-    //public virtual required BankrollDto Bankroll { get; set; }
+    public required Guid BankrollId { get; set; }
+    public virtual Bankroll? Bankroll { get; set; }
     public Guid? TipsterId { get; set; }
     public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
     public required Guid BettingMarketId { get; set; }

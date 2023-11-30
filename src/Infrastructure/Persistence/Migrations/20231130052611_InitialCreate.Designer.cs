@@ -12,7 +12,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BetTrackerDbContext))]
-    [Migration("20231122041051_InitialCreate")]
+    [Migration("20231130052611_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,16 +25,50 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Bankroll", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("CurrentBalance")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("InitialBalance")
+                        .HasColumnType("decimal(10, 4)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("StandardUnit")
+                        .HasColumnType("decimal(10, 4)");
+
+                    b.Property<DateOnly>("StartedAt")
+                        .HasColumnType("date");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bankroll");
+                });
+
             modelBuilder.Entity("Domain.Bet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BettingMarketId")
+                    b.Property<Guid>("BankrollId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BrankroolId")
+                    b.Property<Guid>("BettingMarketId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedDate")
@@ -59,10 +93,12 @@ namespace Persistence.Migrations
                     b.Property<decimal>("TotalStake")
                         .HasColumnType("decimal(10, 4)");
 
-                    b.Property<DateTimeOffset?>("UpdatedDate")
+                    b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BankrollId");
 
                     b.HasIndex("BettingMarketId");
 
@@ -83,7 +119,7 @@ namespace Persistence.Migrations
                     b.Property<int>("Sport")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("UpdatedDate")
+                    b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
@@ -109,7 +145,7 @@ namespace Persistence.Migrations
                     b.Property<int>("Sport")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("UpdatedDate")
+                    b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
@@ -133,7 +169,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTimeOffset?>("UpdatedDate")
+                    b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
@@ -143,6 +179,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Bet", b =>
                 {
+                    b.HasOne("Domain.Bankroll", "Bankroll")
+                        .WithMany("Bets")
+                        .HasForeignKey("BankrollId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.BettingMarket", "BettingMarket")
                         .WithMany()
                         .HasForeignKey("BettingMarketId")
@@ -152,6 +194,8 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Tipster", "Tipster")
                         .WithMany("Bets")
                         .HasForeignKey("TipsterId");
+
+                    b.Navigation("Bankroll");
 
                     b.Navigation("BettingMarket");
 
@@ -167,6 +211,11 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Bet");
+                });
+
+            modelBuilder.Entity("Domain.Bankroll", b =>
+                {
+                    b.Navigation("Bets");
                 });
 
             modelBuilder.Entity("Domain.Bet", b =>

@@ -1,4 +1,5 @@
-﻿using Application.Contracts.Persistence;
+﻿using Application.Common;
+using Application.Contracts.Persistence;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,10 +31,20 @@ public class GenericRepository<T> : IGenericRepository<T>
         return _dbContext.Set<T>().AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
     }
 
-    public Task<IEnumerable<T>> GetPagedAsync(uint page, uint pageSize)
+    public async Task<PagedResult<T>> GetPagedAsync(uint page, uint pageSize)
     {
-        //Todo: implement
-        throw new NotImplementedException();
+        var data = await _dbContext.Set<T>()
+            .Skip((int)((page - 1) * pageSize))
+            .Take((int)pageSize + 1) // take one more than the page size to determine if there is a next page avoing a count query
+            .OrderByDescending(t => t.CreatedDate)
+            .ToListAsync();
+        return new PagedResult<T>()
+        {
+            Items = data.Take((int)pageSize),
+            HasNextPage = data.Count > pageSize,
+            Page = page,
+            PageSize = pageSize
+        };
     }
 
     public void Update(T entity)

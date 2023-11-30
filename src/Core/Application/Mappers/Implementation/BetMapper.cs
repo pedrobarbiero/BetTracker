@@ -13,5 +13,5 @@ public partial class BetMapper : IBetMapper
 
     public partial Bet DtoToBet(GetBetDetailDto betDto);
 
-    public partial Bet DtoToBet(CreateBetCommand createBetCommand);
+    public partial Bet ToBet(CreateBetCommand createBetCommand);
 }

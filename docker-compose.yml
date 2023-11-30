@@ -8,6 +8,8 @@ services:
       dockerfile: ./src/Api/BetTracker.Api/Dockerfile.prod.yml
     ports:
       - "8000:80"
+    networks:
+      - bettracker-network
     depends_on:
       - db
 
@@ -16,5 +18,10 @@ services:
     environment:
       SA_PASSWORD: "_Password123"
       ACCEPT_EULA: "Y"
+    networks:
+      - bettracker-network
     ports:
       - "1433:1433"
+networks:
+    bettracker-network:
+        driver: bridge

@@ -7,7 +7,7 @@ namespace Application.Dtos;
 public record GetBetDetailDto : BaseDto
 {
     //Todo: finish DTOs
-    public required Guid BrankroolId { get; set; }
+    public required Guid BankrollId { get; set; }
     public Guid? TipsterId { get; set; }
     public required Guid BettingMarketId { get; set; }
     public required BettingMarket BettingMarket { get; set; }
