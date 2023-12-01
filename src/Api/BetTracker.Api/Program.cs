@@ -1,5 +1,6 @@
 using Application;
 using Persistence;
+using Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
-//builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+builder.Services.ConfigureInfrastructureServices();
 
 
 //Todo: Create Serilog sink

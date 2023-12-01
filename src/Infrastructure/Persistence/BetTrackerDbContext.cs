@@ -6,8 +6,10 @@ namespace Persistence;
 
 public class BetTrackerDbContext : DbContext
 {
-    public BetTrackerDbContext(DbContextOptions<BetTrackerDbContext> options) : base(options)
+    private readonly TimeProvider _timeProvider;
+    public BetTrackerDbContext(DbContextOptions<BetTrackerDbContext> options, TimeProvider timeProvider) : base(options)
     {
+        _timeProvider = timeProvider;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,7 +32,7 @@ public class BetTrackerDbContext : DbContext
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var utcNow = DateTime.UtcNow; // Todo: use time provider
+        var utcNow = _timeProvider.GetUtcNow();
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
             entry.Entity.UpdatedDate = utcNow;
