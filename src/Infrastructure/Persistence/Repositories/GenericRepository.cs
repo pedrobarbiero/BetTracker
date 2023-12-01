@@ -34,9 +34,9 @@ public class GenericRepository<T> : IGenericRepository<T>
     public async Task<PagedResult<T>> GetPagedAsync(uint page, uint pageSize)
     {
         var data = await _dbContext.Set<T>()
+            .OrderByDescending(t => t.CreatedDate)
             .Skip((int)((page - 1) * pageSize))
             .Take((int)pageSize + 1) // take one more than the page size to determine if there is a next page avoing a count query
-            .OrderByDescending(t => t.CreatedDate)
             .ToListAsync();
         return new PagedResult<T>()
         {

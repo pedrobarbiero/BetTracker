@@ -1,5 +1,6 @@
 using Application;
 using Persistence;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
 //builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+
+
+//Todo: Create Serilog sink
+builder.Host.UseSerilog((context, configuration) => 
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 
 builder.Services.AddControllers();
@@ -27,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
