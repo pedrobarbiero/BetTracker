@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Features.Bets.Requests.Commands;
 using Application.Mappers.Contracts;
-using Domain;
+using Domain.Models;
 using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers.Implementation;

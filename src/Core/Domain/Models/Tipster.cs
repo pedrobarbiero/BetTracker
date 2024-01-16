@@ -1,6 +1,6 @@
 ﻿using Domain.Common;
 
-namespace Domain;
+namespace Domain.Models;
 public class Tipster : BaseEntity
 {
     public required string Name { get; set; }

@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Common;
+﻿using Domain.Common;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;

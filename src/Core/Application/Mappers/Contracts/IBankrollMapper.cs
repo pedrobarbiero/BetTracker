@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.Bankroll;
 using Application.Features.Bankrolls.Requests.Commands;
-using Domain;
+using Domain.Models;
 
 namespace Application.Mappers.Contracts;
 

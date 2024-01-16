@@ -1,6 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Features.Bets.Requests.Commands;
-using Domain;
+using Domain.Models;
 
 namespace Application.Mappers.Contracts;
 

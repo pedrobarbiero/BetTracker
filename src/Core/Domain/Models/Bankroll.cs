@@ -1,7 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Enums;
 
-namespace Domain;
+namespace Domain.Models;
 
 public class Bankroll : BaseEntity
 {

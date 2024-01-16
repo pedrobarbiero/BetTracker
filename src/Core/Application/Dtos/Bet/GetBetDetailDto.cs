@@ -1,6 +1,6 @@
 ﻿using Application.Common;
-using Domain;
 using Domain.Enums;
+using Domain.Models;
 
 namespace Application.Dtos;
 
