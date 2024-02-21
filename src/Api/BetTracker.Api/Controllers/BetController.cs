@@ -3,13 +3,14 @@ using Application.Features.Bets.Requests.Commands;
 using Application.Features.Bets.Requests.Queries;
 using Application.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BetTracker.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class BetController : ControllerBase
 {
     private readonly IMediator _mediator;

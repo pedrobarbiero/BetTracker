@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Persistence;
+﻿using Persistence;
 using Domain.Models.Identity;
 
 
@@ -7,9 +6,10 @@ public static class WebServicesRegistration
 {
     public static IServiceCollection ConfigureIdentityEndpoints(this IServiceCollection services)
     {
-        services.AddIdentityCore<User>()
-            .AddEntityFrameworkStores<BetTrackerIdentityDbContext>()
-            .AddApiEndpoints();
+        services.AddAuthorization();
+        services.AddIdentityApiEndpoints<User>()
+            .AddEntityFrameworkStores<BetTrackerIdentityDbContext>();
+
         return services;
     }
 }
