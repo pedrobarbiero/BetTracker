@@ -1,5 +1,5 @@
 using Application;
-using Domain.Models;
+using Domain.Models.Identity;
 using Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Persistence;
@@ -35,7 +35,7 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 
 var app = builder.Build();
 
-app.MapIdentityApi<AppUser>();
+app.MapIdentityApi<User>();
 
 if (app.Environment.IsDevelopment())
 {

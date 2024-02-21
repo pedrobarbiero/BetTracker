@@ -12,7 +12,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BetTrackerDbContext))]
-    [Migration("20231130052611_InitialCreate")]
+    [Migration("20240221031629_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Bankroll", b =>
+            modelBuilder.Entity("Domain.Models.Bankroll", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace Persistence.Migrations
                     b.ToTable("Bankroll");
                 });
 
-            modelBuilder.Entity("Domain.Bet", b =>
+            modelBuilder.Entity("Domain.Models.Bet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,7 +107,7 @@ namespace Persistence.Migrations
                     b.ToTable("Bets");
                 });
 
-            modelBuilder.Entity("Domain.BettingMarket", b =>
+            modelBuilder.Entity("Domain.Models.BettingMarket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace Persistence.Migrations
                     b.ToTable("BettingMarket");
                 });
 
-            modelBuilder.Entity("Domain.Pick", b =>
+            modelBuilder.Entity("Domain.Models.Pick", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace Persistence.Migrations
                     b.ToTable("Pick");
                 });
 
-            modelBuilder.Entity("Domain.Tipster", b =>
+            modelBuilder.Entity("Domain.Models.Tipster", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,21 +177,21 @@ namespace Persistence.Migrations
                     b.ToTable("Tipster");
                 });
 
-            modelBuilder.Entity("Domain.Bet", b =>
+            modelBuilder.Entity("Domain.Models.Bet", b =>
                 {
-                    b.HasOne("Domain.Bankroll", "Bankroll")
+                    b.HasOne("Domain.Models.Bankroll", "Bankroll")
                         .WithMany("Bets")
                         .HasForeignKey("BankrollId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.BettingMarket", "BettingMarket")
+                    b.HasOne("Domain.Models.BettingMarket", "BettingMarket")
                         .WithMany()
                         .HasForeignKey("BettingMarketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tipster", "Tipster")
+                    b.HasOne("Domain.Models.Tipster", "Tipster")
                         .WithMany("Bets")
                         .HasForeignKey("TipsterId");
 
@@ -202,9 +202,9 @@ namespace Persistence.Migrations
                     b.Navigation("Tipster");
                 });
 
-            modelBuilder.Entity("Domain.Pick", b =>
+            modelBuilder.Entity("Domain.Models.Pick", b =>
                 {
-                    b.HasOne("Domain.Bet", "Bet")
+                    b.HasOne("Domain.Models.Bet", "Bet")
                         .WithMany("Picks")
                         .HasForeignKey("BetId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -213,17 +213,17 @@ namespace Persistence.Migrations
                     b.Navigation("Bet");
                 });
 
-            modelBuilder.Entity("Domain.Bankroll", b =>
+            modelBuilder.Entity("Domain.Models.Bankroll", b =>
                 {
                     b.Navigation("Bets");
                 });
 
-            modelBuilder.Entity("Domain.Bet", b =>
+            modelBuilder.Entity("Domain.Models.Bet", b =>
                 {
                     b.Navigation("Picks");
                 });
 
-            modelBuilder.Entity("Domain.Tipster", b =>
+            modelBuilder.Entity("Domain.Models.Tipster", b =>
                 {
                     b.Navigation("Bets");
                 });

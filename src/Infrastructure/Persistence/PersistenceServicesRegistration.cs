@@ -12,6 +12,10 @@ public static class PersistenceServicesRegistration
     {
         services.AddDbContext<BetTrackerDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("BetTrackerDbConnection")));
+        
+        services.AddDbContext<BetTrackerIdentityDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("IdentityDbConnection")));
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IIdProvider, IdProvider>();
 
