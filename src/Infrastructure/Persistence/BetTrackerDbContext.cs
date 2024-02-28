@@ -46,4 +46,5 @@ public class BetTrackerDbContext : DbContext
     }
 
     public DbSet<Bet> Bets { get; set; }
+    public DbSet<Bankroll> Bankrolls { get; set; }
 }

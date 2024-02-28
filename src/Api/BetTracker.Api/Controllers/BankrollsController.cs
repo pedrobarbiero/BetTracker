@@ -1,4 +1,5 @@
-﻿using Application.Dtos.Bankroll;
+﻿using Application.Common;
+using Application.Dtos.Bankroll;
 using Application.Features.Bankrolls.Requests.Commands;
 using Application.Features.Bankrolls.Requests.Queries;
 using Application.Responses;
@@ -18,7 +19,7 @@ public class BankrollsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetBankrollDto>>> GetBankrolls([FromQuery] GetBankrollListQuery query)
+    public async Task<ActionResult<PagedResult<GetBankrollDto>>> GetBankrolls([FromQuery] GetBankrollListQuery query)
     {
         var bankrolls = await _mediator.Send(query);
         return Ok(bankrolls);
