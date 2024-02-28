@@ -12,13 +12,14 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Bankroll",
+                name: "Bankrolls",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     InitialBalance = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
-                    CurrentBalance = table.Column<int>(type: "int", nullable: false),
+                    CurrentBalance = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false),
                     StartedAt = table.Column<DateOnly>(type: "date", nullable: false),
                     StandardUnit = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -26,7 +27,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bankroll", x => x.Id);
+                    table.PrimaryKey("PK_Bankrolls", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,9 +78,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Bets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bets_Bankroll_BankrollId",
+                        name: "FK_Bets_Bankrolls_BankrollId",
                         column: x => x.BankrollId,
-                        principalTable: "Bankroll",
+                        principalTable: "Bankrolls",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -148,7 +149,7 @@ namespace Persistence.Migrations
                 name: "Bets");
 
             migrationBuilder.DropTable(
-                name: "Bankroll");
+                name: "Bankrolls");
 
             migrationBuilder.DropTable(
                 name: "BettingMarket");

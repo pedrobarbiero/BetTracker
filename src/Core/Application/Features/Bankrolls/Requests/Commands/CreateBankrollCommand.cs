@@ -10,6 +10,6 @@ public class CreateBankrollCommand : IRequest<BaseCommandResponse>
     public required string Name { get; set; }
     public decimal InitialBalance { get; set; }
     public Currency CurrentBalance { get; set; }
-    public DateTime StartedAt { get; set; }
+    public DateOnly StartedAt { get; set; }
     public decimal StandardUnit { get; set; }
 }

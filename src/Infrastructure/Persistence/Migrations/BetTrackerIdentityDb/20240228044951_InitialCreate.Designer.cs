@@ -12,7 +12,7 @@ using Persistence;
 namespace Persistence.Migrations.BetTrackerIdentityDb
 {
     [DbContext(typeof(BetTrackerIdentityDbContext))]
-    [Migration("20240221031612_InitialCreate")]
+    [Migration("20240228044951_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Persistence.Migrations.BetTrackerIdentityDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

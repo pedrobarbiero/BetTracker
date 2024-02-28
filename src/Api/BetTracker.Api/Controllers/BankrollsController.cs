@@ -24,10 +24,19 @@ public class BankrollsController : ControllerBase
         var bankrolls = await _mediator.Send(query);
         return Ok(bankrolls);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetBankrollDto>> GetBankroll(Guid id)
+    {
+        var bankroll = await _mediator.Send(new GetBankrollByIdQuery { Id = id });
+        if (bankroll is null) return NotFound();
+        return Ok(bankroll);
+    }
+
     [HttpPost]
     public async Task<ActionResult<BaseCommandResponse>> CreateBankroll(CreateBankrollCommand createBankrollCommand)
     {
         var response = await _mediator.Send(createBankrollCommand);
-        return Ok(response);
+        return CreatedAtAction(nameof(GetBankroll), new { id = createBankrollCommand.Id }, response);
     }
 }

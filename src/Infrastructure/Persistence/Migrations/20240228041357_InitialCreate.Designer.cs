@@ -12,7 +12,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BetTrackerDbContext))]
-    [Migration("20240221031629_InitialCreate")]
+    [Migration("20240228041357_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,8 +34,11 @@ namespace Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("CurrentBalance")
+                    b.Property<int>("Currency")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("CurrentBalance")
+                        .HasColumnType("decimal(10, 4)");
 
                     b.Property<decimal>("InitialBalance")
                         .HasColumnType("decimal(10, 4)");
@@ -56,7 +59,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bankroll");
+                    b.ToTable("Bankrolls");
                 });
 
             modelBuilder.Entity("Domain.Models.Bet", b =>
