@@ -9,10 +9,10 @@ namespace BetTracker.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BankrollController : ControllerBase
+public class BankrollsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public BankrollController(IMediator mediator)
+    public BankrollsController(IMediator mediator)
     {
         _mediator = mediator;
     }
