@@ -4,12 +4,14 @@ using Application.Features.Bankrolls.Requests.Commands;
 using Application.Features.Bankrolls.Requests.Queries;
 using Application.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BetTracker.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class BankrollsController : ControllerBase
 {
     private readonly IMediator _mediator;

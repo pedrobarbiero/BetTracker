@@ -1,7 +1,6 @@
 ﻿using Domain.Models.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +42,10 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             {
                 options.UseSqlServer(connectionString);
             });
+
+            services.AddAuthentication(defaultScheme: "TestScheme")
+                   .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                       "TestScheme", options => { });
         });
     }
 
