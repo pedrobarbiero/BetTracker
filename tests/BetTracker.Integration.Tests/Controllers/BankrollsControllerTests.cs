@@ -35,7 +35,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
             { "PageNumber", "1" },
             { "PageSize", "2" }
         };
-        var response = await client.GetAsync(QueryHelpers.AddQueryString("/api/Bankrolls", queryParams));
+        var response = await authorizedClient.GetAsync(QueryHelpers.AddQueryString("/api/Bankrolls", queryParams));
         var data = await response.Content.ReadFromJsonAsync<PagedResult<GetBankrollDto>>();
 
         // Assert
@@ -62,7 +62,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         };
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/Bankrolls", createBankrollCommand);
+        var response = await authorizedClient.PostAsJsonAsync("/api/Bankrolls", createBankrollCommand);
         var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
 
         // Assert
@@ -87,7 +87,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         await betTrackerDbContext.SaveChangesAsync();
 
         // Act
-        var response = await client.GetAsync($"/api/bankrolls/{bankroll.Id}");
+        var response = await authorizedClient.GetAsync($"/api/bankrolls/{bankroll.Id}");
         var data = await response.Content.ReadFromJsonAsync<GetBankrollDto>();
 
         // Assert
@@ -104,7 +104,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         var id = Guid.NewGuid();
 
         // Act
-        var response = await client.GetAsync($"/api/Bankrolls/{id}");
+        var response = await authorizedClient.GetAsync($"/api/Bankrolls/{id}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

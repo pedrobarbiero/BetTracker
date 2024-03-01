@@ -6,19 +6,19 @@ namespace BetTracker.Integration.Tests;
 
 public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
 {
-    private readonly IServiceScope _scope;
-
-    protected readonly HttpClient client;
+    protected readonly HttpClient unauthorizedClient;
+    protected readonly HttpClient authorizedClient;
     protected readonly ISender sender;
     protected readonly BetTrackerDbContext betTrackerDbContext;
     protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
     {
-        _scope = factory.Services.CreateScope();
+        var scope = factory.Services.CreateScope();
 
-        sender = _scope.ServiceProvider.GetRequiredService<ISender>();
-        betTrackerDbContext = _scope.ServiceProvider.GetRequiredService<BetTrackerDbContext>();
+        sender = scope.ServiceProvider.GetRequiredService<ISender>();
+        betTrackerDbContext = scope.ServiceProvider.GetRequiredService<BetTrackerDbContext>();
 
-        client = factory.CreateClient();
+        unauthorizedClient = factory.UnathorizedClient;
+        authorizedClient = factory.AuthorizedClient;
     }
 
 }
