@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Models;
+using Domain.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
@@ -14,11 +15,12 @@ public class BetTrackerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(BetTrackerDbContext).Assembly);
         var decimalProperties = modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?));
         foreach (var property in decimalProperties)
         {
-            property.SetColumnType("decimal(10, 4)");
+            property.SetColumnType("decimal(10, 2)");
         }
 
         var stringProperties = modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string) && p.GetMaxLength() == null);
@@ -26,9 +28,6 @@ public class BetTrackerDbContext : DbContext
         {
             property.SetMaxLength(256);
         }
-
-
-        base.OnModelCreating(modelBuilder);
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

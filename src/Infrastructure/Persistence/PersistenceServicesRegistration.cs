@@ -10,7 +10,7 @@ public static class PersistenceServicesRegistration
 {
     public static IServiceCollection ConfigurePersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<BetTrackerDbContext>(options =>
+        services.AddDbContext<BetTrackerDbContext>(options =>        
             options.UseSqlServer(configuration.GetConnectionString("BetTrackerDbConnection")));
         
         services.AddDbContext<BetTrackerIdentityDbContext>(options =>

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Models.Identity;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 
@@ -8,6 +9,7 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
 {
     protected readonly HttpClient unauthorizedClient;
     protected readonly HttpClient authorizedClient;
+    protected readonly ApplicationUser authorizedUser;
     protected readonly ISender sender;
     protected readonly BetTrackerDbContext betTrackerDbContext;
     protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
@@ -19,6 +21,7 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
 
         unauthorizedClient = factory.UnathorizedClient;
         authorizedClient = factory.AuthorizedClient;
+        authorizedUser = factory.AuthorizedUser;
     }
 
 }

@@ -22,9 +22,9 @@ public class BankrollsControllerTests : BaseIntegrationTest
         // Arrange
         var bankrolls = new List<Bankroll>
         {
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 1" },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 2" },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 3" },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 1", UserId = authorizedUser.Id },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 2", UserId = authorizedUser.Id },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 3", UserId = authorizedUser.Id },
         };
         await betTrackerDbContext.Bankrolls.AddRangeAsync(bankrolls);
         await betTrackerDbContext.SaveChangesAsync();   
@@ -82,7 +82,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
     public async Task GetBankroll_WithValidId_ReturnsSuccess()
     {
         // Arrange
-        var bankroll = new Bankroll { Id = Guid.NewGuid(), Name = "Test Bankroll" };
+        var bankroll = new Bankroll { Id = Guid.NewGuid(), Name = "Test Bankroll", UserId = authorizedUser.Id };
         await betTrackerDbContext.Bankrolls.AddAsync(bankroll);
         await betTrackerDbContext.SaveChangesAsync();
 

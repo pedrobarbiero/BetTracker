@@ -16,9 +16,10 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     private readonly MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
     public required HttpClient AuthorizedClient { get; set; }
     public required HttpClient UnathorizedClient { get; set; }
+    public ApplicationUser AuthorizedUser { get; set; } = null!;
 
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
@@ -81,7 +82,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     private async Task CreateDefaultUsers(BetTrackerIdentityDbContext identityDbContext)
     {
-        var user = new User
+        AuthorizedUser = new ApplicationUser
         {
             Id = Guid.Parse("3ef1ab0e-19c2-4640-40de-08dc381a53e4"),
             UserName = "normal-user@bettracker.com",
@@ -94,7 +95,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             ConcurrencyStamp = "c3b833f0-f7e9-481b-b904-fd0c86c8844d",
         };
 
-        await identityDbContext.AddAsync(user);
+        await identityDbContext.AddAsync(AuthorizedUser);
         await identityDbContext.SaveChangesAsync();
     }
 }

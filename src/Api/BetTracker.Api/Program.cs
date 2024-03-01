@@ -1,4 +1,6 @@
 using Application;
+using Application.Contracts.Infrastructure;
+using BetTracker.Api;
 using Domain.Models.Identity;
 using Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -14,6 +16,9 @@ builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
 builder.Services.ConfigureInfrastructureServices();
 builder.Services.ConfigureIdentityEndpoints();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IUserProvider, UserProvider>();
 
 //Todo: Create Serilog sink
 builder.Host.UseSerilog((context, configuration) =>
@@ -46,7 +51,7 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 
 var app = builder.Build();
 
-app.MapIdentityApi<User>();
+app.MapIdentityApi<ApplicationUser>();
 
 if (app.Environment.IsDevelopment())
 {
