@@ -3,6 +3,7 @@ using Application.Dtos.Sport;
 using Application.Features.Sports.Requests.Commands;
 using Application.Responses;
 using BetTracker.Integration.Tests.Factories;
+using Domain.Models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -211,6 +212,26 @@ public class SportsControllerTests : BaseIntegrationTest<SportTestWebAppFactory>
     }
 
     [Fact]
+    public async Task UpdateSport_FromOtherUser_ReturnsBadRequest()
+    {
+        var sport = await dbContext.Sports.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.ApplicationUserId == Domain.Constants.Users.JokerId);
+
+        var updateSportCommand = new UpdateSportCommand
+        {
+            Id = Guid.NewGuid(),
+            Name = "Updated Sport",
+            Slug = "updated-sport"
+        };
+
+        // Act
+        var response = await authorizedClient.PutAsJsonAsync($"{SPORTS_URL}/{sport.Id}", updateSportCommand);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task UpdateSport_WithInvalidId_ReturnsBadRequest()
     {
         // Arrange
@@ -256,5 +277,47 @@ public class SportsControllerTests : BaseIntegrationTest<SportTestWebAppFactory>
         Assert.False(data.Success);
         Assert.NotEmpty(data.Errors);
         Assert.Contains("Name", data.Errors.Keys);
+    }
+
+    [Fact]
+    public async Task DeleteSport_FromOtherUsers_ReturnsBadRequest()
+    {
+        // Arrange
+        var sport = await dbContext.Sports.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.ApplicationUserId != authorizedUser.Id);
+
+        // Act
+        var response = await authorizedClient.DeleteAsync($"{SPORTS_URL}/{sport.Id}");
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.NotNull(data);
+        Assert.False(data.Success);
+    }
+
+    [Fact]
+    public async Task DeleteSport_WithValidId_ReturnsSuccess()
+    {
+        // Arrange
+        var sport = new Sport()
+        {
+            Id = Guid.NewGuid(),
+            ApplicationUserId = authorizedUser.Id,
+            Name = "Delete Sport",
+            Slug = "delete-sport"
+        };
+        await dbContext.Sports.AddAsync(sport);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var response = await authorizedClient.DeleteAsync($"{SPORTS_URL}/{sport.Id}");
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.NotNull(data);
+        Assert.True(data.Success);
+        Assert.Empty(data.Errors);
     }
 }

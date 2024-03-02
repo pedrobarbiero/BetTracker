@@ -51,4 +51,12 @@ public class SportsController : ControllerBase
         if (!response.Success) return BadRequest(response);
         return Ok(response);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<BaseCommandResponse>> DeleteSport(Guid id)
+    {
+        var response = await _mediator.Send(new DeleteSportByIdCommand { Id = id });
+        if (!response.Success) return BadRequest(response);
+        return Ok(response);
+    }
 }
