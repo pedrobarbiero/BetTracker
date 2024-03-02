@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Domain.Models;
 using Domain.Models.Identity;
-using Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
 
@@ -33,6 +33,14 @@ public class BetTrackerDbContext(DbContextOptions options)
         builder.Entity<ApplicationUserLogin>().ToTable("ApplicationUserLogins", schema: "Identity");
         builder.Entity<ApplicationRoleClaim>().ToTable("ApplicationRoleClaims", schema: "Identity");
         builder.Entity<ApplicationUserToken>().ToTable("ApplicationUserTokens", schema: "Identity");
+
+        builder.Entity<ApplicationUser>().HasData(
+            new ApplicationUser
+            {
+                Id = Domain.Constants.JokerId,
+                UserName = "joker@bettracker.com",
+                AccessFailedCount = 100
+            });
     }
 
     public DbSet<Bankroll> Bankrolls { get; set; }

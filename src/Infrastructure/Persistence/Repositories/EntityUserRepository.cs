@@ -2,7 +2,6 @@
 using Application.Contracts.Infrastructure;
 using Application.Contracts.Persistence;
 using Domain.Common;
-using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories;
@@ -12,6 +11,7 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
 {
     protected readonly BetTrackerDbContext _dbContext;
     protected readonly IUserProvider _userProvider;
+
     public EntityUserRepository(BetTrackerDbContext dbContext, IUserProvider userProvider)
     {
         _dbContext = dbContext;
@@ -31,7 +31,7 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
     {
         var userId = GetCurrentUserId();
         var count = await _dbContext.Set<T>()
-            .Where(t => t.Id == id && t.ApplicationUserId == userId)
+            .Where(t => t.ApplicationUserId == GetCurrentUserId())
             .ExecuteDeleteAsync();
         return count > 0;
     }
@@ -40,17 +40,19 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
     {
         return _dbContext.Set<T>()
             .AsNoTracking()
-            .SingleOrDefaultAsync(t => t.Id == id && t.ApplicationUserId == GetCurrentUserId());
+            .SingleOrDefaultAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId));
     }
 
     public async Task<PagedResult<T>> GetPagedAsync(uint page, uint pageSize)
     {
         var data = await _dbContext.Set<T>()
-            .Where(t => t.ApplicationUserId == GetCurrentUserId())
+            .AsNoTracking()
+            .Where(t => t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId)
             .OrderByDescending(t => t.CreatedDate)
             .Skip((int)((page - 1) * pageSize))
-            .Take((int)pageSize + 1) // take one more than the page size to determine if there is a next page avoing a count query
+            .Take((int)pageSize + 1)
             .ToListAsync();
+
         return new PagedResult<T>()
         {
             Items = data.Take((int)pageSize),
@@ -62,12 +64,15 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
 
     public void Update(T entity)
     {
+        if (entity.ApplicationUserId == Domain.Constants.JokerId)
+            throw new UnauthorizedAccessException("User not authorized to update default entities");
+
         entity.ApplicationUserId = GetCurrentUserId();
         _dbContext.Set<T>().Update(entity);
     }
 
     public Task<bool> Exists(Guid id)
     {
-        return _dbContext.Set<T>().AnyAsync(b => b.Id == id && b.ApplicationUserId == GetCurrentUserId());
+        return _dbContext.Set<T>().AnyAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId));
     }
 }

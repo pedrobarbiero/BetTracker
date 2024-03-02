@@ -5,7 +5,7 @@ namespace Domain.Models;
 
 public class BettingMarket : BaseEntity
 {
-    public Sport Sport { get; set; }
+    //public Sport Sport { get; set; }
 
     //Todo: add owner/user
 }

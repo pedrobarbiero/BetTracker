@@ -18,7 +18,6 @@ public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestFactory>
     const string BANKROLLS_URL = "/api/Bankrolls";
     public BankrollsControllerTests(BankrollTestFactory factory) : base(factory)
     {
-        Console.WriteLine("Teste som 1,2,3");
     }
 
     [Fact]
