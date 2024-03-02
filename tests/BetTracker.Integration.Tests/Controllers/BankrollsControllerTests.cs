@@ -5,6 +5,7 @@ using Application.Features.Bankrolls.Requests.Commands;
 using Application.Responses;
 using BetTracker.Integration.Tests.Factories;
 using Domain.Enums;
+using Domain.Models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -253,4 +254,48 @@ public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestWebAppFa
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task DeleteBankroll_FromOtherUsers_ReturnsBadRequest()
+    {
+        // Arrange
+        var bankroll = await dbContext.Bankrolls.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.ApplicationUserId != authorizedUser.Id);
+
+        // Act
+        var response = await authorizedClient.DeleteAsync($"{BANKROLLS_URL}/{bankroll.Id}");
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.NotNull(data);
+        Assert.False(data.Success);
+    }
+
+    [Fact]
+    public async Task DeleteBankroll_WithValidId_ReturnsSuccess()
+    {
+        // Arrange
+        var bankroll = new Bankroll()
+        {
+            Id = Guid.NewGuid(),
+            ApplicationUserId = authorizedUser.Id,
+            Name = "Delete Bankroll",
+            Currency = Currency.GBP,
+            InitialBalance = 0.0m,
+            StandardUnit = 1.0m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
+        await dbContext.Bankrolls.AddAsync(bankroll);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var response = await authorizedClient.DeleteAsync($"{BANKROLLS_URL}/{bankroll.Id}");
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.NotNull(data);
+        Assert.True(data.Success);
+        Assert.Empty(data.Errors);
+    }
 }

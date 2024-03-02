@@ -51,4 +51,12 @@ public class BankrollsController : ControllerBase
         if (!response.Success) return BadRequest(response);
         return Ok(response);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<BaseCommandResponse>> DeleteBankroll(Guid id)
+    {
+        var response = await _mediator.Send(new DeleteBankrollByIdCommand { Id = id });
+        if (!response.Success) return BadRequest(response);
+        return Ok(response);
+    }
 }

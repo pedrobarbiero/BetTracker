@@ -31,7 +31,7 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
     {
         var userId = GetCurrentUserId();
         var count = await _dbContext.Set<T>()
-            .Where(t => t.ApplicationUserId == GetCurrentUserId())
+            .Where(t => t.Id == id && t.ApplicationUserId == userId)
             .ExecuteDeleteAsync();
         return count > 0;
     }
@@ -40,7 +40,8 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
     {
         return _dbContext.Set<T>()
             .AsNoTracking()
-            .SingleOrDefaultAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.Users.JokerId));
+            .SingleOrDefaultAsync(t => t.Id == id && 
+                (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.Users.JokerId));
     }
 
     public async Task<PagedResult<T>> GetPagedAsync(uint page, uint pageSize)
