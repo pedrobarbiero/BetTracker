@@ -5,7 +5,6 @@ using Application.Features.Bankrolls.Requests.Commands;
 using Application.Responses;
 using BetTracker.Integration.Tests.Factories;
 using Domain.Enums;
-using Domain.Models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -13,10 +12,10 @@ using System.Net.Http.Json;
 
 namespace BetTracker.Integration.Tests.Controllers;
 
-public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestFactory>
+public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestWebAppFactory>
 {
-    const string BANKROLLS_URL = "/api/Bankrolls";
-    public BankrollsControllerTests(BankrollTestFactory factory) : base(factory)
+    const string BANKROLLS_URL = "/api/bankrolls";
+    public BankrollsControllerTests(BankrollTestWebAppFactory factory) : base(factory)
     {
     }
 
@@ -26,7 +25,7 @@ public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestFactory>
         // Act
         var queryParams = new Dictionary<string, string?>
         {
-            { "PageNumber", "1" },
+            { "Page", "1" },
             { "PageSize", "2" }
         };
         var response = await authorizedClient.GetAsync(QueryHelpers.AddQueryString(BANKROLLS_URL, queryParams));

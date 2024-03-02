@@ -4,6 +4,6 @@ using MediatR;
 
 namespace Application.Features.Sports.Requests.Queries;
 
-public record GetSportsListQuery : PagedQuery<GetSportDto>, IRequest<PagedResult<GetSportDto>>
+public record GetSportListQuery : PagedQuery<GetSportDto>, IRequest<PagedResult<GetSportDto>>
 {
 }

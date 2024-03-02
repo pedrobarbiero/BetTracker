@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.Features.Sports.Handlers.Queries;
 
-public class GetSportListQueryHandler : IRequestHandler<GetSportsListQuery, PagedResult<GetSportDto>>
+public class GetSportListQueryHandler : IRequestHandler<GetSportListQuery, PagedResult<GetSportDto>>
 {
     private readonly ISportRepository _sportRepository;
     private readonly ISportMapper _sportMapper;
@@ -18,7 +18,7 @@ public class GetSportListQueryHandler : IRequestHandler<GetSportsListQuery, Page
         _sportRepository = sportRepository;
     }
 
-    public async Task<PagedResult<GetSportDto>> Handle(GetSportsListQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<GetSportDto>> Handle(GetSportListQuery request, CancellationToken cancellationToken)
     {
         var paged = await _sportRepository.GetPagedAsync(request.Page, request.PageSize);
         return new PagedResult<GetSportDto>()

@@ -2,9 +2,9 @@
 
 namespace BetTracker.Integration.Tests.Factories;
 
-public class BankrollTestFactory : BaseIntegrationTestWebAppFactory
+public class BankrollTestWebAppFactory : BaseIntegrationTestWebAppFactory
 {
-    public BankrollTestFactory()
+    public BankrollTestWebAppFactory()
     {
     }
 

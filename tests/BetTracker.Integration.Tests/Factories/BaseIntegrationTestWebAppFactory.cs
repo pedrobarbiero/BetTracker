@@ -73,7 +73,7 @@ public class BaseIntegrationTestWebAppFactory : WebApplicationFactory<Program>, 
     private async Task CreateDefaultUsers()
     {
         AuthorizedUser = CreateUser("normal-user@bettracker.com");
-        OtherUser = CreateUser("oter-user@bettracker.com");
+        OtherUser = CreateUser("other-user@bettracker.com");
 
         await dbContext.AddAsync(OtherUser);
         await dbContext.AddAsync(AuthorizedUser);

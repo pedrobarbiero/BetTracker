@@ -34,14 +34,27 @@ public class BetTrackerDbContext(DbContextOptions options)
         builder.Entity<ApplicationRoleClaim>().ToTable("ApplicationRoleClaims", schema: "Identity");
         builder.Entity<ApplicationUserToken>().ToTable("ApplicationUserTokens", schema: "Identity");
 
-        builder.Entity<ApplicationUser>().HasData(
-            new ApplicationUser
-            {
-                Id = Domain.Constants.JokerId,
-                UserName = "joker@bettracker.com",
-                AccessFailedCount = 100
-            });
+        SeedData(builder);
+    }
+
+    private static void SeedData(ModelBuilder builder)
+    {
+        builder.Entity<ApplicationUser>().HasData(new ApplicationUser { Id = Domain.Constants.Users.JokerId, UserName = "joker@bettracker.com", AccessFailedCount = 100 });
+
+        builder.Entity<Sport>().HasData(
+            new Sport() { Id = Domain.Constants.Sports.FootballId, Name = "Football", Slug = "football", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.CricketId, Name = "Cricket", Slug = "cricket", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.HockeyId, Name = "Hockey", Slug = "hockey", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.TennisId, Name = "Tennis", Slug = "tennis", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.VolleyballId, Name = "Volleyball", Slug = "volleyball", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.TableTennisId, Name = "Table Tennis", Slug = "table-tennis", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.BasketballId, Name = "Basketball", Slug = "basketball", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.BaseballId, Name = "Baseball", Slug = "baseball", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.RugbyId, Name = "Rugby", Slug = "rugby", ApplicationUserId = Domain.Constants.Users.JokerId },
+            new Sport() { Id = Domain.Constants.Sports.GolfId, Name = "Golf", Slug = "golf", ApplicationUserId = Domain.Constants.Users.JokerId }
+        );
     }
 
     public DbSet<Bankroll> Bankrolls { get; set; }
+    public DbSet<Sport> Sports { get; set; }
 }

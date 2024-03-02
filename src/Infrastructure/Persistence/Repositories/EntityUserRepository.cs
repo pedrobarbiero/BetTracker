@@ -40,17 +40,19 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
     {
         return _dbContext.Set<T>()
             .AsNoTracking()
-            .SingleOrDefaultAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId));
+            .SingleOrDefaultAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.Users.JokerId));
     }
 
     public async Task<PagedResult<T>> GetPagedAsync(uint page, uint pageSize)
     {
+        var skip = (int)((page - 1) * pageSize);
+        var take = (int)pageSize + 1;
         var data = await _dbContext.Set<T>()
             .AsNoTracking()
-            .Where(t => t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId)
+            .Where(t => t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.Users.JokerId)
             .OrderByDescending(t => t.CreatedDate)
-            .Skip((int)((page - 1) * pageSize))
-            .Take((int)pageSize + 1)
+            .Skip(skip)
+            .Take(take)
             .ToListAsync();
 
         return new PagedResult<T>()
@@ -64,7 +66,7 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
 
     public void Update(T entity)
     {
-        if (entity.ApplicationUserId == Domain.Constants.JokerId)
+        if (entity.ApplicationUserId == Domain.Constants.Users.JokerId)
             throw new UnauthorizedAccessException("User not authorized to update default entities");
 
         entity.ApplicationUserId = GetCurrentUserId();
@@ -73,6 +75,6 @@ public class EntityUserRepository<T> : IEntityUserRepository<T>
 
     public Task<bool> Exists(Guid id)
     {
-        return _dbContext.Set<T>().AnyAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.JokerId));
+        return _dbContext.Set<T>().AnyAsync(t => t.Id == id && (t.ApplicationUserId == GetCurrentUserId() || t.ApplicationUserId == Domain.Constants.Users.JokerId));
     }
 }

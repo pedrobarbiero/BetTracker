@@ -1,6 +1,8 @@
 ﻿using Application.Common;
 using Application.Dtos.Sport;
+using Application.Features.Sports.Requests.Commands;
 using Application.Features.Sports.Requests.Queries;
+using Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +21,34 @@ public class SportsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<GetSportDto>>> GetSports([FromQuery] GetSportsListQuery query)
+    public async Task<ActionResult<PagedResult<GetSportDto>>> GetSports([FromQuery] GetSportListQuery query)
     {
-        var bankrolls = await _mediator.Send(query);
-        return Ok(bankrolls);
+        var sports = await _mediator.Send(query);
+        return Ok(sports);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetSportDto>> GetSport(Guid id)
+    {
+        var sport = await _mediator.Send(new GetSportByIdQuery { Id = id });
+        if (sport is null) return NotFound();
+        return Ok(sport);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BaseCommandResponse>> CreateSport(CreateSportCommand createSportCommand)
+    {
+        var response = await _mediator.Send(createSportCommand);
+        if (!response.Success) return BadRequest(response);
+        return CreatedAtAction(nameof(GetSport), new { id = createSportCommand.Id }, response);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseCommandResponse>> UpdateSport(Guid id, UpdateSportCommand updateSportCommand)
+    {
+        if (id != updateSportCommand.Id) return BadRequest();
+        var response = await _mediator.Send(updateSportCommand);
+        if (!response.Success) return BadRequest(response);
+        return Ok(response);
     }
 }
