@@ -3,33 +3,27 @@ using Application.Common;
 using Application.Dtos.Bankroll;
 using Application.Features.Bankrolls.Requests.Commands;
 using Application.Responses;
+using BetTracker.Integration.Tests.Factories;
+using Domain.Enums;
 using Domain.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace BetTracker.Integration.Tests.Controllers;
 
-public class BankrollsControllerTests : BaseIntegrationTest
+public class BankrollsControllerTests : BaseIntegrationTest<BankrollTestFactory>
 {
     const string BANKROLLS_URL = "/api/Bankrolls";
-    public BankrollsControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
+    public BankrollsControllerTests(BankrollTestFactory factory) : base(factory)
     {
+        Console.WriteLine("Teste som 1,2,3");
     }
 
     [Fact]
     public async Task GetBankrolls_WithValidRequestWithPagination_ReturnsSuccess()
     {
-        // Arrange
-        var bankrolls = new List<Bankroll>
-        {
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 1", ApplicationUserId = authorizedUser.Id },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 2", ApplicationUserId = authorizedUser.Id },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 3", ApplicationUserId = authorizedUser.Id },
-        };
-        await betTrackerDbContext.Bankrolls.AddRangeAsync(bankrolls);
-        await betTrackerDbContext.SaveChangesAsync();   
-
         // Act
         var queryParams = new Dictionary<string, string?>
         {
@@ -48,6 +42,21 @@ public class BankrollsControllerTests : BaseIntegrationTest
     }
 
     [Fact]
+    public async Task GetBankrolls_ShouldReturnOnlyUserBankrolls()
+    {
+        // Act
+        var response = await authorizedClient.GetAsync(BANKROLLS_URL);
+        var data = await response.Content.ReadFromJsonAsync<PagedResult<GetBankrollDto>>();
+
+        var expectedBankrolls = await dbContext.Bankrolls.AsNoTracking().Where(t => t.ApplicationUserId == authorizedUser.Id).ToListAsync();
+        // Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.NotNull(data);
+        Assert.Equal(expectedBankrolls.Count, data.Items.Count());
+        Assert.All(expectedBankrolls, bankroll => Assert.Contains(data.Items, dto => dto.Id == bankroll.Id));
+    }
+
+    [Fact]
     public async Task CreateBankroll_WithValidRequest_ReturnsSuccess()
     {
         // Arrange
@@ -56,7 +65,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         {
             Id = id,
             Name = "Main Bankroll",
-            CurrentBalance = 0.0m,
+            Currency = Currency.GBP,
             InitialBalance = 0.0m,
             StandardUnit = 1.0m,
             StartedAt = DateOnly.FromDateTime(DateTime.UtcNow)
@@ -83,9 +92,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
     public async Task GetBankroll_WithValidId_ReturnsSuccess()
     {
         // Arrange
-        var bankroll = new Bankroll { Id = Guid.NewGuid(), Name = "Test Bankroll", ApplicationUserId = authorizedUser.Id };
-        await betTrackerDbContext.Bankrolls.AddAsync(bankroll);
-        await betTrackerDbContext.SaveChangesAsync();
+        var bankroll = await dbContext.Bankrolls.AsNoTracking().FirstOrDefaultAsync(t => t.ApplicationUserId == authorizedUser.Id);
 
         // Act
         var response = await authorizedClient.GetAsync($"{BANKROLLS_URL}/{bankroll.Id}");
@@ -110,4 +117,142 @@ public class BankrollsControllerTests : BaseIntegrationTest
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
+
+    [Fact]
+    public async Task CreateBankroll_WithInvalidRequest_ReturnsBadRequest()
+    {
+        // Arrange
+        var createBankrollCommand = new CreateBankrollCommand
+        {
+            Name = "a",
+            Currency = Currency.EUR,
+            InitialBalance = -0.1m,
+            StandardUnit = -0.1m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1))
+        };
+
+        // Act
+        var response = await authorizedClient.PostAsJsonAsync(BANKROLLS_URL, createBankrollCommand);
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.NotNull(data);
+        Assert.False(data.Success);
+        Assert.NotEmpty(data.Errors);
+        Assert.Contains("Name", data.Errors.Keys);
+        Assert.Contains("InitialBalance", data.Errors.Keys);
+        Assert.Contains("StandardUnit", data.Errors.Keys);
+        Assert.Contains("StartedAt", data.Errors.Keys);
+    }
+
+    [Fact]
+    public async Task UpdateBankroll_WithValidRequest_ReturnsSuccess()
+    {
+        // Arrange
+        var bankroll = await dbContext.Bankrolls.AsNoTracking().FirstOrDefaultAsync(t => t.ApplicationUserId == authorizedUser.Id);
+
+        var updateBankrollCommand = new UpdateBankrollCommand
+        {
+            Id = bankroll.Id,
+            Name = "Updated Bankroll",
+            Currency = Currency.GBP,
+            InitialBalance = 0.0m,
+            StandardUnit = 1.0m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
+
+        // Act
+        var response = await authorizedClient.PutAsJsonAsync($"{BANKROLLS_URL}/{bankroll.Id}", updateBankrollCommand);
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.NotNull(data);
+        Assert.True(data.Success);
+        Assert.Empty(data.Errors);
+        Assert.Equal(bankroll.Id, data.Id);
+        Assert.True(data.Success);
+        Assert.NotNull(data.Message);
+        Assert.NotEmpty(data.Message);
+    }
+
+    [Fact]
+    public async Task UpdateBankroll_WithInvalidRequest_ReturnsBadRequest()
+    {
+        // Arrange
+        var bankroll = await dbContext.Bankrolls.AsNoTracking().FirstOrDefaultAsync(t => t.ApplicationUserId == authorizedUser.Id);
+
+        var updateBankrollCommand = new UpdateBankrollCommand
+        {
+            Id = bankroll.Id,
+            Name = "a",
+            Currency = Currency.EUR,
+            InitialBalance = -0.1m,
+            StandardUnit = -0.1m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1))
+        };
+
+        // Act
+        var response = await authorizedClient.PutAsJsonAsync($"{BANKROLLS_URL}/{bankroll.Id}", updateBankrollCommand);
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.NotNull(data);
+        Assert.False(data.Success);
+        Assert.NotEmpty(data.Errors);
+        Assert.Contains("Name", data.Errors.Keys);
+        Assert.Contains("InitialBalance", data.Errors.Keys);
+        Assert.Contains("StandardUnit", data.Errors.Keys);
+        Assert.Contains("StartedAt", data.Errors.Keys);
+    }
+
+    [Fact]
+    public async Task UpdateBankroll_WithInvalidId_ReturnsBadRequest()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var updateBankrollCommand = new UpdateBankrollCommand
+        {
+            Id = id,
+            Name = "Updated Bankroll",
+            Currency = Currency.GBP,
+            InitialBalance = 0.0m,
+            StandardUnit = 1.0m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
+
+        // Act
+        var response = await authorizedClient.PutAsJsonAsync($"{BANKROLLS_URL}/{id}", updateBankrollCommand);
+        var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains("Id", data.Errors.Keys);
+    }
+
+    [Fact]
+    public async Task UpdateBankroll_WithDifferentIdInRequest_ReturnsBadRequest()
+    {
+        // Arrange
+        var bankroll = await dbContext.Bankrolls.AsNoTracking().FirstOrDefaultAsync(t => t.ApplicationUserId == authorizedUser.Id);
+
+        var updateBankrollCommand = new UpdateBankrollCommand
+        {
+            Id = Guid.NewGuid(),
+            Name = "Updated Bankroll",
+            Currency = Currency.GBP,
+            InitialBalance = 0.0m,
+            StandardUnit = 1.0m,
+            StartedAt = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
+
+        // Act
+        var response = await authorizedClient.PutAsJsonAsync($"{BANKROLLS_URL}/{bankroll.Id}", updateBankrollCommand);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
 }

@@ -21,4 +21,5 @@ public record GetBetDetailDto : BaseDto
     public decimal ExpectedYield { get; set; }
     public bool IsMultiple { get; set; }
     public BetResult Result { get; set; }
+    public Guid ApplicationUserId { get; set; }
 }

@@ -39,6 +39,16 @@ public class BankrollsController : ControllerBase
     public async Task<ActionResult<BaseCommandResponse>> CreateBankroll(CreateBankrollCommand createBankrollCommand)
     {
         var response = await _mediator.Send(createBankrollCommand);
+        if (!response.Success) return BadRequest(response);
         return CreatedAtAction(nameof(GetBankroll), new { id = createBankrollCommand.Id }, response);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseCommandResponse>> UpdateBankroll(Guid id, UpdateBankrollCommand updateBankrollCommand)
+    {
+        if (id != updateBankrollCommand.Id) return BadRequest();
+        var response = await _mediator.Send(updateBankrollCommand);
+        if (!response.Success) return BadRequest(response);
+        return Ok(response);
     }
 }

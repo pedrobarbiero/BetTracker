@@ -17,7 +17,7 @@ public static class PersistenceServicesRegistration
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IIdProvider, IdProvider>();
 
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IEntityUserRepository<>), typeof(EntityUserRepository<>));
         services.AddScoped<IBetRepository, BetRespository>();
 
         services.AddScoped<IBankrollRepository, BankrollRepository>();

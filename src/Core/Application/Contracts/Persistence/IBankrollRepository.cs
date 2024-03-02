@@ -2,6 +2,6 @@
 
 namespace Application.Contracts.Persistence;
 
-public interface IBankrollRepository : IGenericRepository<Bankroll>
+public interface IBankrollRepository : IEntityUserRepository<Bankroll>
 {
 }

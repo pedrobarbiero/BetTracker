@@ -3,7 +3,6 @@ using Application.Contracts.Persistence;
 using Application.Features.Bankrolls.Requests.Commands;
 using Application.Mappers.Contracts;
 using Application.Responses;
-using Domain.Models.Identity;
 using MediatR;
 
 namespace Application.Features.Bankrolls.Handlers.Commands;
@@ -29,6 +28,7 @@ public class CreateBankrollCommandHandler : IRequestHandler<CreateBankrollComman
         request.ApplicationUserId = _userProvider.GetCurrentUserId();
         var bankroll = _bankrollMapper.ToBankroll(request);
         var created = await _bankrollRepository.AddAsync(bankroll);
+
         return new BaseCommandResponse()
         {
             Id = created.Id,

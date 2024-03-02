@@ -9,17 +9,19 @@ using System.Net.Http.Json;
 using Testcontainers.MsSql;
 
 
-namespace BetTracker.Integration.Tests;
+namespace BetTracker.Integration.Tests.Factories;
 
-public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class BaseIntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
     public required HttpClient AuthorizedClient { get; set; }
     public required HttpClient UnathorizedClient { get; set; }
     public ApplicationUser AuthorizedUser { get; set; } = null!;
+    public ApplicationUser OtherUser { get; set; } = null!;
+    protected BetTrackerDbContext dbContext { get; set; } = null!;
 
 
-protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
@@ -44,10 +46,10 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
         await _dbContainer.StartAsync();
         using var scope = Services.CreateScope();
         var scopedServices = scope.ServiceProvider;
-        var identityDbContext = scopedServices.GetRequiredService<BetTrackerDbContext>();
+        dbContext = scopedServices.GetRequiredService<BetTrackerDbContext>();
 
-        await identityDbContext.Database.MigrateAsync();
-        await CreateDefaultUsers(identityDbContext);
+        await dbContext.Database.MigrateAsync();
+        await CreateDefaultUsers();
 
         UnathorizedClient = CreateClient();
         AuthorizedClient = CreateClient();
@@ -58,6 +60,8 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
         });
         var responseData = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
         AuthorizedClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {responseData.AccessToken}");
+
+        await SeedDefaultData();
     }
 
 
@@ -66,23 +70,36 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
         return _dbContainer.StopAsync();
     }
 
-    private async Task CreateDefaultUsers(BetTrackerDbContext identityDbContext)
+    private async Task CreateDefaultUsers()
     {
-        AuthorizedUser = new ApplicationUser
+        AuthorizedUser = CreateUser("normal-user@bettracker.com");
+        OtherUser = CreateUser("oter-user@bettracker.com");
+
+        await dbContext.AddAsync(OtherUser);
+        await dbContext.AddAsync(AuthorizedUser);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public virtual Task SeedDefaultData()
+    {
+        //should implement this method in the derived class
+        return Task.CompletedTask;
+    }
+
+    private ApplicationUser CreateUser(string email)
+    {
+        return new ApplicationUser
         {
-            Id = Guid.Parse("3ef1ab0e-19c2-4640-40de-08dc381a53e4"),
-            UserName = "normal-user@bettracker.com",
-            NormalizedUserName = "NORMAL-USER@BETTRACKER.COM",
-            Email = "normal-user@bettracker.com",
-            NormalizedEmail = "NORMAL-USER@BETTRACKER.COM",
+            Id = Guid.NewGuid(),
+            UserName = email,
+            NormalizedUserName = email.ToUpper(),
+            Email = email,
+            NormalizedEmail = email.ToUpper(),
             EmailConfirmed = true,
             PasswordHash = "AQAAAAIAAYagAAAAEFVY8MnAtT3leUN1A4SGJju7PJ5Gj9Dl4K5vR75I5w+y+gxTjZ3iMyfVTRTGRY3KOg==",
             SecurityStamp = "WIPG27DGPLSQ5BCBCJ362ND5B6JTBL3M",
             ConcurrencyStamp = "c3b833f0-f7e9-481b-b904-fd0c86c8844d",
         };
-
-        await identityDbContext.AddAsync(AuthorizedUser);
-        await identityDbContext.SaveChangesAsync();
     }
 }
 

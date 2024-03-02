@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Domain.Models;
 
-public class Bet : BaseEntity
+public class Bet : BaseEntityUser
 {
     ////public required Guid BankrollId { get; set; }
     ////public virtual Bankroll? Bankroll { get; set; }

@@ -20,4 +20,5 @@ public record CreateBetCommand : IRequest<BaseCommandResponse>
     public decimal ExpectedYield { get; set; }
     public bool IsMultiple { get; set; }
     public BetResult Result { get; set; }
+    public Guid ApplicationUserId { get; set; }
 }

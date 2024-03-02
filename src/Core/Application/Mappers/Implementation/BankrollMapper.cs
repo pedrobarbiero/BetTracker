@@ -10,5 +10,6 @@ namespace Application.Mappers.Implementation;
 public partial class BankrollMapper : IBankrollMapper
 {
     public partial GetBankrollDto GetBankrollDto(Bankroll bankroll);
+    public partial Bankroll ToBankroll(UpdateBankrollCommand command);
     public partial Bankroll ToBankroll(CreateBankrollCommand command);
 }
