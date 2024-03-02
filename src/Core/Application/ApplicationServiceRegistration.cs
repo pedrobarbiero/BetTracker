@@ -14,6 +14,7 @@ public static class ApplicationServicesRegistration
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddScoped<IBetMapper, BetMapper>();
         services.AddScoped<IBankrollMapper, BankrollMapper>();
+        services.AddScoped<ISportMapper, SportMapper>();
 
         services.AddMediatR(c =>
         {

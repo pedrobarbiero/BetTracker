@@ -21,6 +21,7 @@ public static class PersistenceServicesRegistration
         services.AddScoped<IBetRepository, BetRespository>();
 
         services.AddScoped<IBankrollRepository, BankrollRepository>();
+        services.AddScoped<ISportRepository, SportRepository>();
 
         return services;
     }
