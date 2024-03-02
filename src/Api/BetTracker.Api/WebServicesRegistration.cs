@@ -8,7 +8,7 @@ public static class WebServicesRegistration
     {
         services.AddAuthorization();
         services.AddIdentityApiEndpoints<ApplicationUser>()
-            .AddEntityFrameworkStores<BetTrackerIdentityDbContext>();
+            .AddEntityFrameworkStores<BetTrackerDbContext>();
 
         return services;
     }

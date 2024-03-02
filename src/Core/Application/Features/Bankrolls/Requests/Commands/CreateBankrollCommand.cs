@@ -12,5 +12,5 @@ public class CreateBankrollCommand : IRequest<BaseCommandResponse>
     public Currency CurrentBalance { get; set; }
     public DateOnly StartedAt { get; set; }
     public decimal StandardUnit { get; set; }
-    public Guid? UserId { get; set; }
+    public Guid? ApplicationUserId { get; set; }
 }

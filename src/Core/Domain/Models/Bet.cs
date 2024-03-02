@@ -5,8 +5,8 @@ namespace Domain.Models;
 
 public class Bet : BaseEntity
 {
-    public required Guid BankrollId { get; set; }
-    public virtual Bankroll? Bankroll { get; set; }
+    ////public required Guid BankrollId { get; set; }
+    ////public virtual Bankroll? Bankroll { get; set; }
     public Guid? TipsterId { get; set; }
     public virtual Tipster? Tipster { get; set; } // null if the bet is not from a tipster
     public required Guid BettingMarketId { get; set; }

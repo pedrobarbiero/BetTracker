@@ -23,26 +23,16 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            var descriptorDbContext = services
+            var descriptor = services
                  .SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<BetTrackerDbContext>));
-            var descriptorIdentityDbContext = services
-                 .SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<BetTrackerIdentityDbContext>));
 
-            if (descriptorDbContext is not null)
+            if (descriptor is not null)
             {
-                services.Remove(descriptorDbContext);
-            }
-            if (descriptorIdentityDbContext is not null)
-            {
-                services.Remove(descriptorIdentityDbContext);
+                services.Remove(descriptor);
             }
 
             var connectionString = _dbContainer.GetConnectionString();
             services.AddDbContext<BetTrackerDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
-            services.AddDbContext<BetTrackerIdentityDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             });
@@ -54,14 +44,10 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
         await _dbContainer.StartAsync();
         using var scope = Services.CreateScope();
         var scopedServices = scope.ServiceProvider;
-        var dbContext = scopedServices.GetRequiredService<BetTrackerDbContext>();
-        var identityDbContext = scopedServices.GetRequiredService<BetTrackerIdentityDbContext>();
+        var identityDbContext = scopedServices.GetRequiredService<BetTrackerDbContext>();
 
-        await dbContext.Database.MigrateAsync();
         await identityDbContext.Database.MigrateAsync();
         await CreateDefaultUsers(identityDbContext);
-
-
 
         UnathorizedClient = CreateClient();
         AuthorizedClient = CreateClient();
@@ -80,7 +66,7 @@ protected override void ConfigureWebHost(IWebHostBuilder builder)
         return _dbContainer.StopAsync();
     }
 
-    private async Task CreateDefaultUsers(BetTrackerIdentityDbContext identityDbContext)
+    private async Task CreateDefaultUsers(BetTrackerDbContext identityDbContext)
     {
         AuthorizedUser = new ApplicationUser
         {

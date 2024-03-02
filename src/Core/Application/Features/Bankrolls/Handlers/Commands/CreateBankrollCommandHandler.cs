@@ -26,7 +26,7 @@ public class CreateBankrollCommandHandler : IRequestHandler<CreateBankrollComman
     public async Task<BaseCommandResponse> Handle(CreateBankrollCommand request, CancellationToken cancellationToken)
     {
         request.Id = _idProvider.GetNextIdIfEmptyOrNull(request.Id);
-        request.UserId = _userProvider.GetCurrentUserId();
+        request.ApplicationUserId = _userProvider.GetCurrentUserId();
         var bankroll = _bankrollMapper.ToBankroll(request);
         var created = await _bankrollRepository.AddAsync(bankroll);
         return new BaseCommandResponse()

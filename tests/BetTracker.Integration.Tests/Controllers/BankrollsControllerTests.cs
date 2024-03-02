@@ -12,6 +12,7 @@ namespace BetTracker.Integration.Tests.Controllers;
 
 public class BankrollsControllerTests : BaseIntegrationTest
 {
+    const string BANKROLLS_URL = "/api/Bankrolls";
     public BankrollsControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
     }
@@ -22,9 +23,9 @@ public class BankrollsControllerTests : BaseIntegrationTest
         // Arrange
         var bankrolls = new List<Bankroll>
         {
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 1", UserId = authorizedUser.Id },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 2", UserId = authorizedUser.Id },
-            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 3", UserId = authorizedUser.Id },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 1", ApplicationUserId = authorizedUser.Id },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 2", ApplicationUserId = authorizedUser.Id },
+            new () { Id = Guid.NewGuid(), Name = "Test Bankroll 3", ApplicationUserId = authorizedUser.Id },
         };
         await betTrackerDbContext.Bankrolls.AddRangeAsync(bankrolls);
         await betTrackerDbContext.SaveChangesAsync();   
@@ -35,7 +36,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
             { "PageNumber", "1" },
             { "PageSize", "2" }
         };
-        var response = await authorizedClient.GetAsync(QueryHelpers.AddQueryString("/api/Bankrolls", queryParams));
+        var response = await authorizedClient.GetAsync(QueryHelpers.AddQueryString(BANKROLLS_URL, queryParams));
         var data = await response.Content.ReadFromJsonAsync<PagedResult<GetBankrollDto>>();
 
         // Assert
@@ -62,7 +63,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         };
 
         // Act
-        var response = await authorizedClient.PostAsJsonAsync("/api/Bankrolls", createBankrollCommand);
+        var response = await authorizedClient.PostAsJsonAsync(BANKROLLS_URL, createBankrollCommand);
         var data = await response.Content.ReadFromJsonAsync<BaseCommandResponse>();
 
         // Assert
@@ -82,12 +83,12 @@ public class BankrollsControllerTests : BaseIntegrationTest
     public async Task GetBankroll_WithValidId_ReturnsSuccess()
     {
         // Arrange
-        var bankroll = new Bankroll { Id = Guid.NewGuid(), Name = "Test Bankroll", UserId = authorizedUser.Id };
+        var bankroll = new Bankroll { Id = Guid.NewGuid(), Name = "Test Bankroll", ApplicationUserId = authorizedUser.Id };
         await betTrackerDbContext.Bankrolls.AddAsync(bankroll);
         await betTrackerDbContext.SaveChangesAsync();
 
         // Act
-        var response = await authorizedClient.GetAsync($"/api/bankrolls/{bankroll.Id}");
+        var response = await authorizedClient.GetAsync($"{BANKROLLS_URL}/{bankroll.Id}");
         var data = await response.Content.ReadFromJsonAsync<GetBankrollDto>();
 
         // Assert
@@ -104,7 +105,7 @@ public class BankrollsControllerTests : BaseIntegrationTest
         var id = Guid.NewGuid();
 
         // Act
-        var response = await authorizedClient.GetAsync($"/api/Bankrolls/{id}");
+        var response = await authorizedClient.GetAsync($"{BANKROLLS_URL}/{id}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
